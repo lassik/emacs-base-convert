@@ -1,4 +1,4 @@
-;;; base-convert-live.el --- Base converter -*- lexical-binding: t -*-
+;;; base-convert-live.el --- Number base conversion as you type -*- lexical-binding: t -*-
 ;;
 ;; SPDX-License-Identifier: ISC
 ;; Author: Lassi Kortela <lassi@lassi.io>
