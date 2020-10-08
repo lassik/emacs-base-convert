@@ -1,8 +1,8 @@
-;;; base-convert.el --- Base converter -*- lexical-binding: t -*-
+;;; base-convert-live.el --- Base converter -*- lexical-binding: t -*-
 ;;
 ;; SPDX-License-Identifier: ISC
 ;; Author: Lassi Kortela <lassi@lassi.io>
-;; URL: https://github.com/lassik/emacs-base-convert
+;; URL: https://github.com/lassik/emacs-base-convert-live
 ;; Package-Requires: ((emacs "25.1"))
 ;; Package-Version: 0.1.0
 ;; Keywords: convenience
@@ -25,7 +25,7 @@
 ;;
 ;;; Code:
 
-(defun base-convert--format-binary (uint)
+(defun base-convert-live--format-binary (uint)
   "Internal helper to format the unsigned integer UINT as binary."
   (with-temp-buffer
     (let ((done nil))
@@ -35,7 +35,7 @@
         (setq done (= uint 0))))
     (nreverse (buffer-string))))
 
-(defun base-convert--table-row (input radix)
+(defun base-convert-live--table-row (input radix)
   "Internal helper to generate one row of the conversion table.
 
 INPUT is any string. RADIX is the number base to try parsing as."
@@ -45,7 +45,7 @@ INPUT is any string. RADIX is the number base to try parsing as."
          (let ((sign (if (< integer 0) "-" "")))
            (setq integer (abs integer))
            (list (cons (format "%s%s" sign
-                               (base-convert--format-binary integer))
+                               (base-convert-live--format-binary integer))
                        (= radix 2))
                  (cons (format "%s%o" sign integer)
                        (= radix 8))
@@ -54,7 +54,7 @@ INPUT is any string. RADIX is the number base to try parsing as."
                  (cons (format "%s%x" sign integer)
                        (= radix 16)))))))
 
-(defun base-convert--table-rows (input)
+(defun base-convert-live--table-rows (input)
   "Internal helper to generate all rows of the conversion table.
 
 INPUT is any string."
@@ -63,17 +63,17 @@ INPUT is any string."
                         ("Oct" . t)
                         ("Dec" . t)
                         ("Hex" . t))
-                      (base-convert--table-row input 2)
-                      (base-convert--table-row input 8)
-                      (base-convert--table-row input 10)
-                      (base-convert--table-row input 16))))
+                      (base-convert-live--table-row input 2)
+                      (base-convert-live--table-row input 8)
+                      (base-convert-live--table-row input 10)
+                      (base-convert-live--table-row input 16))))
 
-(defun base-convert--display (input)
+(defun base-convert-live--display (input)
   "Ingernal helper to display conversion window for INPUT."
   (with-current-buffer-window
       "*Base-Convert*" nil nil
     (let* ((inhibit-read-only t)
-           (rows (base-convert--table-rows input))
+           (rows (base-convert-live--table-rows input))
            (col-count (length (car rows)))
            (max-widths (make-list col-count 0)))
       (dolist (row rows)
@@ -102,12 +102,12 @@ INPUT is any string."
             (insert pad "  ")))
         (insert "\n\n")))))
 
-(defun base-convert--display-from-minibuffer (&rest _ignored)
+(defun base-convert-live--display-from-minibuffer (&rest _ignored)
   "Internal helper to display conversion window for minibuffer input."
-  (base-convert--display (minibuffer-contents)))
+  (base-convert-live--display (minibuffer-contents)))
 
 ;;;###autoload
-(defun base-convert ()
+(defun base-convert-live ()
   "Show base conversions for number typed into the minibuffer.
 
 All possible conversions are displayed in a pop-up window and are
@@ -115,10 +115,10 @@ updated live as you type."
   (interactive)
   (minibuffer-with-setup-hook
       (lambda () (add-hook 'after-change-functions
-                           #'base-convert--display-from-minibuffer
+                           #'base-convert-live--display-from-minibuffer
                            nil 'local))
     (read-string "Digits to convert: " "")))
 
-(provide 'base-convert)
+(provide 'base-convert-live)
 
-;;; base-convert.el ends here
+;;; base-convert-live.el ends here
