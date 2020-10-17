@@ -4,7 +4,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-base-convert-live
 ;; Package-Requires: ((emacs "25.1"))
-;; Package-Version: 0.1.0
+;; Version: 0.1.0
 ;; Keywords: convenience
 ;;
 ;; This file is not part of GNU Emacs.
